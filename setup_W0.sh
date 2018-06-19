@@ -18,7 +18,8 @@ echo "Updating system with required packages."
 echo "This may take a while..."
 git pull
 sudo apt-get update
-sudo apt-get install -y vim tmux python-dev python-pip python-bluepy hcitool
+sudo apt-get install -y vim tmux python-dev python-pip hcitool
+sudo -H pip install bluepy==1.1.4
 echo "Done installing packages!"
 
 # Todo: Add sensing script to /etc/rc.local so logging starts on startup
