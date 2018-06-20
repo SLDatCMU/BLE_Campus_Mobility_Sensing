@@ -27,7 +27,7 @@ with open('/etc/hostname', 'r') as fh:
     hostname = fh.readline().strip()
 try:
     node_num = int(re.findall( r'\d+', hostname )[0])
-    DATA_PATH = "/home/pi/BLE_Campus_Mobility_Sensing/passive_ble/data/"
+    DATA_PATH = "/home/pi/BLE_Campus_Mobility_Sensing/passive_ble/data/".lower()
 except:
     if hostname == "TacitMonolith":
         DATA_PATH = "/home/mark/Documents/Repos/BLE_Campus_Mobility_Sensing/passive_ble/data/"

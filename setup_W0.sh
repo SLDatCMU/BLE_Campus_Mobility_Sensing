@@ -2,12 +2,16 @@ if [ $# -eq 1 ]
 then
 	if [ $1 -gt 9 ]
 	then
-		nodename="ble_mobility_$1"
+		nodename="ble-mobility-$1"
 	else
-		nodename="ble_mobility_0$1"
+		nodename="ble-mobility-0$1"
 	fi
 	echo "Setting Pi W0 up with hostname $nodename"
-	hostname $nodename
+	sudo hostname $nodename
+	sudo echo $nodename > /etc/hostname
+	sudo head -n 4 /etc/hosts > /tmp/hosts.BAK
+	sudo echo -e "127.0.0.1\t$nodename" >> /tmp/hosts.BAK
+	sudo mv /tmp/hosts.BAK /etc/hosts
 else
 	echo "No argument supplied!"
 	echo "Run as: `basename "$0"` <number of BLE sensing node>"
