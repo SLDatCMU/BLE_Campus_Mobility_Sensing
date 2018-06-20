@@ -16,9 +16,8 @@ fi
 
 echo "Updating system with required packages."
 echo "This may take a while..."
-git pull
 sudo apt-get update
-sudo apt-get install -y vim tmux python-dev python-pip hcitool
+sudo apt-get install -y vim tmux python-dev python-pip libglib2.0-dev python-numpy python-scipy
 sudo -H pip install bluepy==1.1.4
 echo "Done installing packages!"
 
