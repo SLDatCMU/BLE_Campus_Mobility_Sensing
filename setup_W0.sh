@@ -23,10 +23,11 @@ echo "This may take a while..."
 sudo apt-get update
 sudo apt-get install -y vim tmux python-dev python-pip libglib2.0-dev python-numpy python-scipy
 sudo -H pip install bluepy==1.1.4
+sudo reboot
 echo "Done installing packages!"
 
 # Todo: Add sensing script to /etc/rc.local so logging starts on startup
 # Todo: Add periodic upload to collection server in crontab or similar
 # Todo: Detect if node is outdoor node based on presence of ADC on SPI bus
 # Todo: Add power management (auto sleep, wakeup, shutdown) if node is outdoor node
-#		This may include frequency governor and increased polling period for BLE sensing.
+#	This may include frequency governor and increased polling period for BLE sensing.
