@@ -18,7 +18,7 @@ else
 	exit 1
 fi
 
-echo "Synchronizing data"
+echo "Adding new node to record"
 echo "This may take a while..."
 rsync_cmd="sshpass -p \"bleSense&Mobility\" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p 22' --progress --ignore-existing pi@ble-mobility-${number}.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/${nodename}"
 echo $rsync_cmd >> /home/pi/collect-daily.sh
