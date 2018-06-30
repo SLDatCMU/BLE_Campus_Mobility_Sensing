@@ -10,5 +10,4 @@ sshpass -p "bleSense&Mobility" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p
 sshpass -p "bleSense&Mobility" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p 22' --progress --ignore-existing pi@ble-mobility-05.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/node05
 sshpass -p "bleSense&Mobility" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p 22' --progress --ignore-existing pi@ble-mobility-10.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/node10
 sshpass -p "bleSense&Mobility" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p 22' --progress --ignore-existing pi@ble-mobility-12.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/node12
-
-
+sshpass -p "bleSense&Mobility" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p 22' --progress --ignore-existing pi@ble-mobility-01.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/node01
