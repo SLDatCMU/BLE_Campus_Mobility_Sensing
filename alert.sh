@@ -8,6 +8,14 @@ check_memory () {
 	fi
 }
 
+# check if tmux has active sessions
+check_tmux () {
+	tmux list-panes -F '#{pane_active} #{pane_pid}' > /dev/null 2>&1
+	if [[ "$?" -ne 0 ]]; then
+		echo "`hostname`.wv.cc.cmu.edu is not running tmux code" | mail -s "Node not running tmux alert" pengc1@andrew.cmu.edu
+	fi
+}
+
 max=13
 for i in `seq 1 $max`
 do 
@@ -21,6 +29,7 @@ do
 		echo "Node ${nodename} is off" | mail -s "Node off alert" pengc1@andrew.cmu.edu
 	else 
 		sshpass -p "bleSense&Mobility" ssh -o StrictHostKeyChecking=no pi@${nodename} "$(typeset -f check_memory); check_memory" 
+		sshpass -p "bleSense&Mobility" ssh -o StrictHostKeyChecking=no pi@${nodename} "$(typeset -f check_tmux); check_tmux"
 	fi
 done
 
