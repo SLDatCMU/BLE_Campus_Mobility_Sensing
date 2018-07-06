@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ $# -eq 1 ]
 then
 	if [ $1 -gt 9 ]
@@ -20,6 +19,17 @@ fi
 
 echo "Adding new node to record"
 echo "This may take a while..."
-rsync_cmd="sshpass -p \"bleSense&Mobility\" rsync -rvz -e 'ssh -o StrictHostKeyChecking=no -p 22' --progress --ignore-existing pi@ble-mobility-${number}.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/${nodename}"
+
+# rsync daily data
+
+#ssh_cmd="ssh pi@ble-mobility-${number}.wv.cc.cmu.edu"
+rsync_cmd="rsync -rvz -Pav -e \"ssh -i /home/pi/.ssh/id_rsa\" --progress pi@ble-mobility-${number}.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/${nodename}"
+#echo $ssh_cmd >> /home/pi/ble_campus_mobility_sensing/collect-daily.sh 
 echo $rsync_cmd >> /home/pi/ble_campus_mobility_sensing/collect-daily.sh
+
+# setup mail function for each deployed node
+sudo ./mail-setup.sh $1
+
+# run tmux
+sudo ./run-tmux.sh $1
 

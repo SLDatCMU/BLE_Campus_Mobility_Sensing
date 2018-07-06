@@ -23,4 +23,4 @@ else
 	exit 1
 fi
 
-sshpass -p "bleSense&Mobility" ssh -o StrictHostKeyChecking=no pi@${nodename} "$(typeset -f mail_setup); mail_setup" 
+ssh -i /home/pi/.ssh/id_rsa pi@${nodename} "$(typeset -f mail_setup); mail_setup" 
