@@ -12,8 +12,9 @@ import re
 import math
 
 # Scanning period in seconds
-SCAN_PERIOD = 10.0
-HEADER_STR = "ADDR\tADDRTYPE\tNAME\tDEVCLASS\tRSSI\tRFTYPE\tCONNECTABLE\n"
+SCAN_PERIOD_BT = 2.0
+SCAN_PERIOD_BLE = 8.0
+HEADER_STR = "ADDR ADDRTYPE NAME DEVCLASS RSSI RFTYPE CONNECTABLE\n"
 FORMAT_STR = "{}\t" * HEADER_STR.count("\t") + "{}\n"
 ble_scanner = Scanner() #.withDelegate(ScanDelegate())
 #bt_socket = bt_rssi.setup_bluetooth_inquiry()
@@ -28,7 +29,7 @@ def poll_bt(sock, timeout=1):
     return bt_devices 
 
 def poll_ble(ble_scanner, timeout=1):
-    ble_devices = ble_scanner.scan(SCAN_PERIOD)
+    ble_devices = ble_scanner.scan(SCAN_PERIOD_BLE)
     return ble_devices
 
 def poll_wifi(timeout=1):
@@ -38,7 +39,7 @@ def log_to_file(fname, prev_date):
     global bt_socket, ble_scanner
     global HEADER_STR, FORMAT_STR
     fh = open(fname, "w")
-    fh.write(HEADER_STR)
+   # fh.write(HEADER_STR)
     while True:
         # Check  that we are on the same day as the file handle we are writing to:
         new_date = datetime.datetime.utcnow()
@@ -49,11 +50,11 @@ def log_to_file(fname, prev_date):
 
         current = datetime.datetime.utcnow()
         current_hour = current.hour
-        bt_devices = poll_bt(bt_socket, timeout=SCAN_PERIOD)
-        ble_devices = poll_ble(ble_scanner, timeout=SCAN_PERIOD)
-
+        bt_devices = poll_bt(bt_socket, timeout=SCAN_PERIOD_BT)
+        ble_devices = poll_ble(ble_scanner, timeout=SCAN_PERIOD_BLE)
+        fh.write("* " + "* " + str(current) + " " + str(len(bt_devices) + len(ble_devices)) + "\n")
         for addr, name in bt_devices:
-            fh.write(FORMAT_STR.format(addr, '', name, '', '', 'bt', ''));
+            fh.write(addr + " " + "BT" + " " + str(name) + "\n")
         for dev in ble_devices:
             name = ""
             for (adtype, desc, value) in dev.getScanData():
@@ -63,7 +64,7 @@ def log_to_file(fname, prev_date):
                 #    print("\n")
                 if "name" in desc.lower():
                     name = value
-            fh.write(FORMAT_STR.format(dev.addr, dev.addrType, name, '', dev.rssi, 'ble', dev.connectable))
+            fh.write(dev.addr + " " + str(dev.rssi) + " " + str(dev.addrType) + " " + str(dev.connectable) + " " + str(name) + "\n")
         fh.flush()
 
     return prev_date
