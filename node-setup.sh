@@ -1,5 +1,10 @@
 #!/bin/bash
 
+git_setup(){
+	cd ble_campus_mobility_sensing
+	git checkout ble_more_attribs
+	git pull origin ble_more_attribs
+}
 if [ $# -eq 1 ]
 then
 	if [ $1 -gt 9 ]
@@ -20,14 +25,16 @@ fi
 echo "Adding new node to record"
 echo "This may take a while..."
 
-# rsync daily data
+# get git repo
+ssh -i /home/pi/.ssh/id_rsa pi@ble-mobility-${number}.wv.cc.cmu.edu "$(typeset -f git_setup); git_setup"
 
+# rsync daily data
 rsync_cmd="rsync -rvz -Pav -e \"ssh -i /home/pi/.ssh/id_rsa\" --progress pi@ble-mobility-${number}.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/${nodename}"
 echo $rsync_cmd >> /home/pi/ble_campus_mobility_sensing/collect-daily.sh
 
 # setup mail function for each deployed node
-sudo ./mail-setup.sh $1
+# sudo ./mail-setup.sh $1
 
 # Setup running tmux for every deployed node after reboot
-sudo ./run-tmux.sh $1
+# sudo ./run-tmux.sh $1
 
