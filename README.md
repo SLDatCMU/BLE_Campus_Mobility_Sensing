@@ -3,6 +3,8 @@ Summer 2018 project using Raspeberry Pi 0Ws distributed across campus to determi
 
 The shell scripts(the following 1 to 5) are meant to be executed on server node(Node 00)
 
+Note: If number is from 1 to 9, type number instead of 0number(for example when deploy number 9 node, type 9 instead of 09). 
+
 1.node-setup.sh
 
 function: Let each new deployed node synchronize its data to server each day,send alert emails(when memory is low or shutdown) if necessary, and automatically run combined_scanner.py every time the deployed node is on.
