@@ -29,8 +29,8 @@ echo "This may take a while..."
 ssh -i /home/pi/.ssh/id_rsa pi@ble-mobility-${number}.wv.cc.cmu.edu "$(typeset -f git_setup); git_setup"
 
 # rsync daily data
-rsync_cmd="rsync -rvz -Pav -e \"ssh -i /home/pi/.ssh/id_rsa\" --progress pi@ble-mobility-${number}.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/${nodename}"
-echo $rsync_cmd >> /home/pi/ble_campus_mobility_sensing/collect-daily.sh
+#rsync_cmd="rsync -rvz -Pav -e \"ssh -i /home/pi/.ssh/id_rsa\" --progress pi@ble-mobility-${number}.wv.cc.cmu.edu:/home/pi/ble_campus_mobility_sensing/passive_ble/data /home/pi/data_collection/${nodename}"
+#echo $rsync_cmd >> /home/pi/ble_campus_mobility_sensing/collect-daily.sh
 
 # setup mail function for each deployed node
 # sudo ./mail-setup.sh $1

@@ -18,7 +18,7 @@ check_tmux () {
 
 
 # max=13
-listVar="3 4 5 6 7 9 10 11 12"
+listVar="2 3 4 5 6 7 8 9 10 11 12 13"
 # for i in `seq 1 $max`
 for i in $listVar; do 
 	if [[ "$i" -gt 9 ]]; then

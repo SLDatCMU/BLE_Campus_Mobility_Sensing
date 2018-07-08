@@ -12,7 +12,7 @@ run_tmux () {
 	chmod +x tmux_start.sh
 	# add command to /etc/rc.local
 	# sudo sed -i -e '$i \sudo bash /home/pi/tmux_start.sh &\n' /etc/rc.local
-	# sudo reboot
+	sudo reboot
 }
 
 if [ $# -eq 1 ]
