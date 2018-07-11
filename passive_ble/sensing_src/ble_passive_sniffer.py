@@ -10,7 +10,7 @@ import time
 import re
 
 # Scanning period in seconds
-SCAN_PERIOD = 5.0
+SCAN_PERIOD = 10.0
 
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
