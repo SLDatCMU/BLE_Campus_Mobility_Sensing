@@ -1,7 +1,9 @@
 import sys
 from device_list_time_slot import get_device_list
+import networkx as nx
 from sets import Set
-node = [3, 12]
+
+node = [2,3,4,5,6,7,8,9,10,12,13]
 def connectivity_at_certain_time(time, device_list, node, connect_time):
     """
         this module is to build graph(dict) based on the device list
@@ -14,7 +16,7 @@ def connectivity_at_certain_time(time, device_list, node, connect_time):
     dict = {}
     set = Set()
     length = len(device_list)
-    for t in range(time, time + 30):
+    for t in range(time, time + connect_time):
         for i in range(0, length):
             temp_dict = device_list[i]
             for key in temp_dict[t].keys():
@@ -75,7 +77,8 @@ def get_min_length(device_list):
     """
     min_len = len(device_list[0])
     for list in device_list:
-        if min_len < len(list):
+        print len(list)
+        if min_len > len(list):
             min_len = len(list)
     return min_len
 
@@ -94,12 +97,17 @@ def dict_to_graph(dict):
         G.add_edge(pos[0], pos[1], weight=int(dict.get(key)))
     return G
 
-
 if __name__ == '__main__':
     input_date = sys.argv[1]
-    time_slot = int(str(sys.argv[2]))
+    time_slot = int(sys.argv[2])
     desired_time = int(sys.argv[3])
-    device_list = get_device_list(node, input_date, time_slot)
+    connect_time = int(sys.argv[4])
+    path = sys.argv[5]
+    output = sys.argv[6]
+    device_list = get_device_list(node, input_date, time_slot, path)
     remove_duplicate_device(device_list)
-    dict = connectivity_at_certain_time(time_switch(desired_time, time_slot), device_list, node, 30 * 6 / time_slot)
-    print dict
+    dict = connectivity_at_certain_time(time_switch(desired_time, time_slot), device_list, node, connect_time * 6 / time_slot)
+    print(dict)
+    g = dict_to_graph(dict)
+    path = path + '/graph/'
+    nx.write_gexf(g, path + output + '.gexf')

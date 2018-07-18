@@ -5,13 +5,14 @@ from sets import Set
 from get_device_dict import get_device_dict
 from noise_removal import get_static_set
 
-node = [3, 12]
+node = [2,3,4,5,6,7,8,9,10,11,12,13]
 
 """This File is to filter out the static device shows in all of the node
 """
 
 def write_clean_device(file_name, static_device, n, date):
-    fOutput = open('n' + str(n) + '_' + date + '_c.txt', 'w')
+    path = '/Users/zhengkaizhang/Desktop/' + date + '/'
+    fOutput = open(path + 'n' + str(n) + '_' + date + '_c.txt', 'w')
     block = -1;
     with open(file_name) as f:
         for line in f.readlines():
@@ -27,7 +28,11 @@ def write_clean_device(file_name, static_device, n, date):
         fOutput.close()
 
 def data_filter_helper(n, date):
-    file_name = 'n' + str(n) + '_' + date + '_0.txt'
+    if n <= 9:
+        path = '/Users/zhengkaizhang/Desktop/data_collection/node0' + str(n) + '/data/'
+    else:
+        path = '/Users/zhengkaizhang/Desktop/data_collection/node' + str(n) + '/data/'
+    file_name = path + 'n' + str(n) + '_' + date + '_0.txt'
     device_dict = get_device_dict(file_name)
     static_device = get_static_set(device_dict)
     write_clean_device(file_name, static_device, n, date)

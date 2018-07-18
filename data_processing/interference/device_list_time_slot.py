@@ -2,11 +2,11 @@ import sys
 from sets import Set
 from device_class import Device
 
-def get_device_list(node, input_date, time_slot):
+def get_device_list(node, input_date, time_slot, path):
 
     device_list = []
     for node_num in node:
-        file_name = 'n' + str(node_num) + '_' + input_date + '_c.txt'
+        file_name = path + '/n' + str(node_num) + '_' + input_date + '_c.txt'
         device_list.append(get_device_single_node(file_name, time_slot))
     return device_list
 
