@@ -89,15 +89,40 @@ def dict_to_graph(dict):
         dict : dictionary contains the graph built
         Returns:
         G : graph we built with label (weight)
-        """
+    """
     G = nx.MultiDiGraph()
-    
+    node = get_node_attributes(dict)
+    for n in node.keys():
+        G.add_node(n, attri=int(node.get(n)))
+
     for key in dict.keys():
         pos = key.split(" ")
         G.add_edge(pos[0], pos[1], weight=int(dict.get(key)))
     return G
 
-if __name__ == '__main__':
+def get_node_attributes(dict):
+    """
+        Add attributes to node indegree - outdegree
+        Args:
+            dict: input dict based graph
+        Return:
+            node dict
+    """
+    node = {};
+    for key in dict.keys():
+        pos = key.split(" ")
+        for i in range(0, 2):
+            if i == 1:
+                t = -1
+            else:
+                t = 1
+            if pos[i] in node:
+                node[pos[i]] += t * int(dict.get(key))
+            else:
+                node[pos[i]] = t * int(dict.get(key))
+    return node
+
+def main():
     input_date = sys.argv[1]
     time_slot = int(sys.argv[2])
     desired_time = int(sys.argv[3])
@@ -111,3 +136,7 @@ if __name__ == '__main__':
     g = dict_to_graph(dict)
     path = path + '/graph/'
     nx.write_gexf(g, path + output + '.gexf')
+
+
+if __name__ == '__main__':
+    main()
