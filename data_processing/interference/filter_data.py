@@ -5,7 +5,7 @@ from sets import Set
 from get_device_dict import get_device_dict
 from noise_removal import get_static_set
 
-node = [2,3,4,5,6,7,8,9,10,11,12,13]
+node = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 
 """This File is to filter out the static device shows in all of the node
 """

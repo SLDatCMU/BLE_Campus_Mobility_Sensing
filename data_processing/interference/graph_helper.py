@@ -5,6 +5,7 @@ from sets import Set
 
 node = [2,3,4,5,6,7,8,9,10,12,13]
 def connectivity_at_certain_time(time, device_list, node, connect_time):
+    time = int(time)
     """
         this module is to build graph(dict) based on the device list
         Args:
@@ -66,7 +67,7 @@ def time_switch(desired_time, time_slot):
         Returns:
         the return vlue: the list position
         """
-    return (desired_time + 4) * 6 * 60 / time_slot
+    return float(desired_time + 4) * 6.0 * 60.0 / time_slot
 
 def get_min_length(device_list):
     """Get the min time length of all of the node to avoid out of index limit error
@@ -125,18 +126,18 @@ def get_node_attributes(dict):
 def main():
     input_date = sys.argv[1]
     time_slot = int(sys.argv[2])
-    desired_time = int(sys.argv[3])
-    connect_time = int(sys.argv[4])
-    path = sys.argv[5]
-    output = sys.argv[6]
+    path = sys.argv[3]
+    connect_time = 15
     device_list = get_device_list(node, input_date, time_slot, path)
     remove_duplicate_device(device_list)
-    dict = connectivity_at_certain_time(time_switch(desired_time, time_slot), device_list, node, connect_time * 6 / time_slot)
-    print(dict)
-    g = dict_to_graph(dict)
-    path = path + '/graph/'
-    nx.write_gexf(g, path + output + '.gexf')
 
+    for i in range(6, 19):
+        for j in range (0, 4):
+            desired_time = i + j * 0.25
+            dict = connectivity_at_certain_time(time_switch(desired_time, time_slot), device_list, node, connect_time * 6 / time_slot)
+            g = dict_to_graph(dict)
+            loc = path + '/graph/' + input_date + '_' + str(i) + '_' + str(j * 15)
+            nx.write_gexf(g, loc + '.gexf')
 
 if __name__ == '__main__':
     main()
