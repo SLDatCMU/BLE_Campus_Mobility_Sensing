@@ -42,7 +42,9 @@ class Device:
                 True: choose Self
                 False: choose input device
         """
-        if (self.rssi_mean > device_to_compare.rssi_mean + 2):
+        if (self.rssi_mean > device_to_compare.rssi_mean) & (self.count > device_to_compare.count):
+            return True
+        if (self.count > (device_to_compare.count + 2)):
             return True
         if (self.no < device_to_compare.no):
             return True
