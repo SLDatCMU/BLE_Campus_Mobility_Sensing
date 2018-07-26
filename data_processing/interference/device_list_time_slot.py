@@ -11,6 +11,7 @@ def get_device_list(node, input_date, time_slot, path):
     return device_list
 
 def get_device_single_node(file_name, time_slot):
+    print file_name
     count = 0
     single_device = []
     single_device.append({})
