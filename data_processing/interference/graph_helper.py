@@ -3,7 +3,7 @@ from device_list_time_slot import get_device_list
 import networkx as nx
 from sets import Set
 
-node = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,18,19,20,21,22,23]
+node = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,18,20,21,22,23]
 def connectivity_at_certain_time(time, device_list, node, connect_time):
     time = int(time)
     """
@@ -140,12 +140,11 @@ def node_list_to_csv(node_list, input_date, path):
             path: where the csv files stores
         Return:
     """
-
     id, time_stamp, attributes = graph_to_csv_formter(node_list);
-
+    
     loc = path + '/graph/'
     f = open(loc + input_date + '_node.csv', 'w')
-    f.write('Id,Label,Timestamp,Population\n')
+    f.write('Id,Label,timeset,Population\n')
     for key in id.keys():
         f.write(str(key) + ',' + str(key) + ',"<[')
         length = len(time_stamp[id[key]])
@@ -182,7 +181,7 @@ def edge_list_to_csv(edge_list, input_date, path):
 
     loc = path + '/graph/'
     f = open(loc + input_date + '_edge.csv', 'w')
-    f.write('Source,Target,Type,Id,Label,Timestamp,Connectivity\n')
+    f.write('Source,Target,Type,Id,Label,timeset,Connectivity\n')
     temp = 0
     for key in edge.keys():
         list = key.split(" ");
@@ -246,6 +245,7 @@ def main():
             dict = connectivity_at_certain_time(time_switch(desired_time, time_slot), device_list, node, connect_time * 6 / time_slot)
             node_list.append(get_node_attributes(dict))
             edge_list.append(dict)
+    connectivity_analysis(edge_list)
     node_list_to_csv(node_list, input_date, path)
     edge_list_to_csv(edge_list, input_date, path)
 
