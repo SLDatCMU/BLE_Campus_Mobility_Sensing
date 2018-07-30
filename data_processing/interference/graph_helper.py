@@ -2,8 +2,14 @@ import sys
 from device_list_time_slot import get_device_list
 import networkx as nx
 from sets import Set
+from collection_analysis import collection_analysis_node, collection_analysis_edge
+sys.path.insert(0, '/Users/zhengkaizhang/Desktop/Summer Project/interference/data_analysis/')
+from analysis import connectivity_analysis
 
-node = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,18,20,21,22,23]
+node = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,18,19,20,21,22,23]
+lat = {1:40.2632,2:40.2634,3:40.2632,4:40.2634,5:40.2632,6:40.2634,7:40.2634,8:40.2634,9:40.2633,10:40.2635,12:40.2632,13:40.2632,14:40.2636,15:40.2631,16:40.2628,18:40.2632,19:40.2638,20:40.2637,21:40.2635,22:40.2635,23:40.2635,24:0,25:0}
+lng = {1:79.5645,2:79.5645,3:79.5648,4:79.5647,5:79.5646,6:75.5645,7:40.5648,8:79.5648,9:79.5646,10:79.5648,12:79.5648,13:79.5646,14:79.5629,15:79.5646,16:79.5639,18:79.5640,19:79.5630,20:79.5632,21:79.5628,22:79.5637,23:79.5641,24:0,25:0}
+
 def connectivity_at_certain_time(time, device_list, node, connect_time):
     time = int(time)
     """
@@ -144,7 +150,7 @@ def node_list_to_csv(node_list, input_date, path):
     
     loc = path + '/graph/'
     f = open(loc + input_date + '_node.csv', 'w')
-    f.write('Id,Label,timeset,Population\n')
+    f.write('Id,Label,timeset,Population,lat,lng\n')
     for key in id.keys():
         f.write(str(key) + ',' + str(key) + ',"<[')
         length = len(time_stamp[id[key]])
@@ -164,7 +170,7 @@ def node_list_to_csv(node_list, input_date, path):
         f.write(str(time_stamp[id[key]][length - 1]))
         f.write(', ')
         f.write(str(attributes[id[key]][length - 1]))
-        f.write(']>"\n')
+        f.write(']>",' + str(lat[int(key)]) + ',' + str(-lng[int(key)]) + '\n')
     f.close()
 
 def edge_list_to_csv(edge_list, input_date, path):
@@ -245,8 +251,10 @@ def main():
             dict = connectivity_at_certain_time(time_switch(desired_time, time_slot), device_list, node, connect_time * 6 / time_slot)
             node_list.append(get_node_attributes(dict))
             edge_list.append(dict)
-    connectivity_analysis(edge_list)
+#connectivity_analysis(edge_list, input_date)
+    node_list = collection_analysis_node(node_list)
     node_list_to_csv(node_list, input_date, path)
+    edge_list = collection_analysis_edge(edge_list)
     edge_list_to_csv(edge_list, input_date, path)
 
 if __name__ == '__main__':
