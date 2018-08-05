@@ -1,52 +1,62 @@
-node_scott = {'2':0,'4':0, '7':0, '8':0, '10':0} # 24
-node_HH = {'1':0,'3':0, '5':0, '12':0, '13':0} # 25
+POS = ['HH', 'SCOTT', 'WEAN' , 'GATE', 'UC', 'Baker' , 'Porter', 'Doherty', 'DRAMA']
+HH_C = [['1'], ['6', '7'], ['9'], ['23'], [], [], [], [], []]
+HH_1 = [['5', '12'],['2','4'], ['10'],[],[],['25'],['15'],['18'],[]]
+HH_15 = [[],[],[],[],['14', '19', '20', '21'], ['16'],[],['26'],['22']]
+HH_2 = [['3', '13'], ['8'],[],[],['24'],[],[],[],[]]
+Layers = [HH_C, HH_1, HH_15, HH_2]
 
 def collection_analysis_node(node_list):
+    """
+        node_list [{}, {}, {}, {}, {}]
+    """
+    result = []
+    count = 0;
+
     for list in node_list:
-        for key in node_scott.keys():
-            if (key in list):
-                temp = list[key]
-                del list[key]
-                if ('24' in list):
-                    list['24'] += temp
-                else:
-                    list['24'] = temp
-        for key in node_HH.keys():
-            if (key in list):
-                temp = list[key]
-                del list[key]
-                if '25' in list:
-                    list['25'] += temp
-                else:
-                    list['25'] = temp
-    return node_list
+        result.append({})
+        for key in list.keys():
+            pos = getPosition(key)
+            if pos in result[count].keys():
+                result[count][pos] += node_list[count][key]
+            else:
+                result[count][pos] = node_list[count][key]
+
+        count += 1
+
+    return result
 
 def collection_analysis_edge(edge_list):
+
+    result = []
+    count = 0
+
     for list in edge_list:
+        result.append({})
         for key in list.keys():
-            changed = False
-            string_array = key.split(" ");
-            if (string_array[0] in node_scott) & (string_array[1] in node_scott):
-                del list[key]
+            s_arr = key.split(" ")
+            pos1 = getPosition(s_arr[0])
+            pos2 = getPosition(s_arr[1])
+            if (pos1 == pos2):
                 continue
-            if (string_array[0] in node_HH) & (string_array[1] in node_HH):
-                del list[key]
-                continue
-            for i in range(0, 2):
-                if string_array[i] in node_scott.keys():
-                    changed = True
-                    string_array[i] = '24'
-                if (string_array[i] in node_HH.keys()):
-                    changed = True
-                    string_array[i] = '25'
-            if (changed):
-                temp = list[key]
-                del list[key]
-                if string_array[0] + " " + string_array[1] in list.keys():
-                    list[string_array[0] + " " + string_array[1]] += temp
-                else:
-                    list[string_array[0] + " " + string_array[1]] = temp
-    return edge_list
+            s_temp = pos1 + " " + pos2
+            if s_temp in result[count].keys():
+                result[count][s_temp] += edge_list[count][key]
+            else:
+                result[count][s_temp] = edge_list[count][key]
+        count += 1
+
+    return result
+
+
+def getPosition(key):
+    x_len = len(Layers)
+    y_len = len(POS)
+    for i in range(0, x_len):
+        for j in range(0, y_len):
+            if (key in Layers[i][j]):
+                return POS[j] + '_' + str(i)
+
+    return ''
 
 
 if __name__ == '__main__':
