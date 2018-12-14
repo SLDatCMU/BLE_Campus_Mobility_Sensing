@@ -59,10 +59,7 @@ while True:
             devices = scanner.scan(SCAN_PERIOD)
             current = datetime.datetime.utcnow()
             current_hour = current.hour
-            fh.write("* " + str(current) + " " + str(len(devices)) + "\n");
+            fh.write("* " + str(current) + " " + str(len(devices)) + "\n")
             for dev in devices:
-                for (adtype, desc, value) in dev.getScanData():
-                    print "%s %s %s" % (adtype, desc, value)
-
                 fh.write(str(dev.addr) + " " + str(dev.rssi) + "\n");
                 fh.flush()
