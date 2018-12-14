@@ -11,8 +11,6 @@ import re
 
 # Scanning period in seconds
 SCAN_PERIOD = 10.0
-# Txt file write out frequency in Minutes
-FREQ_COLLECT = 15
 
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
@@ -46,27 +44,16 @@ while True:
     date_str = str(prev_date.date())
     # Find next available data file handle:
     i = 0
-    # Sequence Numeber to let us now which time slot data is lost
-    now = datetime.now()
-    seconds_since_midnight = (now - now.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
-    seq = int(seconds_since_midnight / (FREQ_COLLECT * 60))
-
-    while os.path.exists(DATA_PATH+"n%s_%s_%s_%s.txt" % (node_num, date_str, seq, i)):
+    while os.path.exists(DATA_PATH+"n%s_%s_%s.txt" % (node_num, date_str,i)):
         i += 1
-
     # Log to file for the rest of the day:
-    with open(DATA_PATH+"n%s_%s_%s_%s.txt" % (node_num, date_str , seq, i), "w") as fh:
-        time_old = time.time()
+    with open(DATA_PATH+"n%s_%s_%s.txt" % (node_num, date_str ,i), "w") as fh:
         while True:
             # Check that we are on the same day as the file handle we are writing to:
             new_date = datetime.datetime.utcnow()
             if new_date.date() != prev_date.date():
                 prev_date = new_date
                 break
-
-            time_now = time.time()
-            if time_now - time_old >= FREQ_COLLECT * 60:
-                seq += 1
 
             # Otherwise scan and log devices every ten seconds:
             devices = scanner.scan(SCAN_PERIOD)
