@@ -1,4 +1,4 @@
-def device_to_dict(file_name):
+def get_device_dict(file_name):
     """
         Read from data files to generate device dictionary for one node
         Args:

@@ -1,6 +1,6 @@
 from sets import Set
 
-def get_static_dict_all_day(device_dict):
+def get_static_set(device_dict):
     """
         remove static some static device which always appears in the record
         Args:
