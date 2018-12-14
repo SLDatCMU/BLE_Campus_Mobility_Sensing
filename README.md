@@ -2,7 +2,7 @@
 Summer 2018 project using Raspeberry Pi 0Ws distributed across campus to determine population mobility patterns by tracking Bluetooth device signatures.
 
 # Visualization
-All of the files are located in data_processing/interference/
+All of the files are located in data_processing/interference/  \n
 filter_data: filter  out the static device at each node. usage: python filter_data 2018-08-11
 graph helper: it can help you generate csv for gephi from the raw data after filter data. For detial usage look at the file
 collection_analysis: which is to build 3D model it may be useful for your future work to build 3D  model.
