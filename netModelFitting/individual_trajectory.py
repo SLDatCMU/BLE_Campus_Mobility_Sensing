@@ -81,6 +81,8 @@ def fit_gravity(node, node_count, flow, func):
 	plt.legend()
 	plt.show()
 
+def func2():
+	pass
 
 # keep major time in process_dict
 # MIN_VALUE = 14 * 60 = 840
@@ -137,22 +139,18 @@ def fit_radiation(node, node_count, outflow, pair_count):
 
 	if len(actual_flow) == 0 or len(radiation_flow) == 0:
 		average_err = "no"
-		return average_err, 0
+		return average_err, 0, 0
 	actual_flow = np.array(np.log(actual_flow))
 	radiation_flow = np.array(np.log(radiation_flow))
 	distance_list = np.array(np.log(distance_list))
 
 	
-
 	# if radiation flow contains all zero, there will be "not converge" error
-	if np.count_nonzero(radiation_flow) == 0:
-		radiation_flow = radiation_flow + 1
-		actual_flow = actual_flow + 1
+	# if np.count_nonzero(radiation_flow) == 0:
+	# 	radiation_flow = radiation_flow + 1
+	# 	actual_flow = actual_flow + 1
 
 	
-
-
-
 	# make scatter plots for actual_flow and radiation_flow
 	# plt.scatter(distance_list, actual_flow, color = 'r',label = "actual_flow")
 	# plt.scatter(distance_list, radiation_flow, color = 'g',label = "radiation_flow")
@@ -162,7 +160,8 @@ def fit_radiation(node, node_count, outflow, pair_count):
 
 	# use predicted radiation flow to fit actual flow
 	fit_err = np.sum((np.polyval(np.polyfit(radiation_flow, actual_flow, 1), radiation_flow) - actual_flow)**2)
-	average_err = fit_err / float(len(actual_flow))
+	# average_err = fit_err / float(len(actual_flow))
+	average_err = fit_err
 	# plt.xlabel('distance(r)')
 	# plt.ylabel('flow')
 	# plt.title("Fitting radiation model in log traveling distance from 10am to 6pm if distance > 55m and < 245m")
@@ -170,14 +169,50 @@ def fit_radiation(node, node_count, outflow, pair_count):
 	# plt.show()
 	fitted_radiation = np.polyval(np.polyfit(radiation_flow, actual_flow, 1), radiation_flow)
 	r_value = rsquared(fitted_radiation,actual_flow)
+	# ks_test = kolmogorov_smirnov(radiation_flow,actual_flow)
+    
+    # one-sample kstest, returns (ks statistics(D value), p value)
+    # explaination: https://stats.stackexchange.com/questions/57885/how-to-interpret-p-value-of-kolmogorov-smirnov-test-python
+	ks_test = scipy.stats.ks_2samp(radiation_flow,actual_flow)[0]
 
-	return average_err, r_value
+	# using scipy.stats.kstest
+	# ks_test = scipy.stats.kstest(actual_flow,'norm')[0]
+
+	return average_err, r_value, ks_test
 
 def rsquared(x, y):
     """ Return R^2 where x and y are array-like."""
 
     slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(x, y)
     return r_value**2
+
+# Reference: https://codereview.stackexchange.com/questions/79527/kolmogorov-smirnov-function
+def kolmogorov_smirnov(data1, data2):
+    """
+    Given two lists of data, finds the two-sample Kolmogorov Smirnov statistic
+	"""
+    data1 = sorted(data1)
+    data2 = sorted(data2)
+
+    index1 = 0
+    index2 = 0
+
+    ks_stat = 0
+
+    while index1 < len(data1) and index2 < len(data2):
+        if data1[index1] == data2[index2]:
+            index1 += 1
+            index2 += 1
+
+        elif data1[index1] < data2[index2]:
+            index1 += 1
+
+        elif data1[index1] > data2[index2]:
+            index2 += 1
+
+        ks_stat = max(ks_stat, abs(index1/len(data1) - index2/len(data2)))
+
+    return ks_stat
 
 
 
@@ -325,7 +360,7 @@ def find_best_time_thresh(process_dict):
 # One_hour time slot radiation model fitting
 def plot_hist_time_slots(process_dict):
 	hour_dict = {}
-	for in_hour in range(0,22):
+	for in_hour in range(0,24):
 		# initialize
 		hour_dict[in_hour] = 0
 		out_hour = in_hour + 1
@@ -335,7 +370,7 @@ def plot_hist_time_slots(process_dict):
 		# do not filter out any data here
 		# thresh = 0
 		# test time threhold that has lowest MSE error, get from find_best_time_thresh
-		thresh = 179
+		thresh = 0
 		trajectory_dict = print_popular_individual(process_dict_2)
 		# print trajectory_dict
 		pair_count = plot_popular_pair(trajectory_dict)
@@ -344,15 +379,15 @@ def plot_hist_time_slots(process_dict):
 		# print node_count
 		outflow = count_outflow(node, pair_count)
 		# print outflow
-		average_err, r_value = fit_radiation(node, node_count, outflow, pair_count)
-		print r_value
+		average_err, r_value, ks_test = fit_radiation(node, node_count, outflow, pair_count)
+		print ks_test
 		if average_err == "no":
 			continue
-		hour_dict[in_hour] = r_value
+		hour_dict[in_hour] = ks_test
 	print hour_dict
 	plt.bar(hour_dict.keys(),hour_dict.values(), color='g')
 	plt.xlabel('input_hour')
-	plt.ylabel('r_value')
+	plt.ylabel('D value')
 	plt.title("one-hour time slot radiation model fitting")
 	plt.legend()
 	plt.show()
