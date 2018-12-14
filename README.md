@@ -32,6 +32,7 @@ Summer 2018 project using Raspeberry Pi 0Ws distributed across campus to determi
 4. Plot popular trajectory without campus background(helper: plot_popular_trajectory.py)
 5. Generate static graph in gephi and pygraphviz (gephi_pygraphviz.py, graph_helper.py)
 6. Noise removal and preprocessing(noise_removal.py, create_time_series.py, device_list_time_slot.py, device_class.py, pickle_dump_load.py, recover.py)
+Data Management/Collection and failure checking bash scripts and their descriptions are at README at master's branch 
 
 
 
